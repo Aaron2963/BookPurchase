@@ -15,6 +15,34 @@
     <link rel="stylesheet" href="css/custom.css">
     <script>
       var ordersBuffer = {};
+      var booksBuffer = {};
+      <% 
+        List<Book> bookList = (List) request.getAttribute("bookList");
+        for (Book book : bookList) { 
+          int bookId = book.getId();
+          String name = book.getName();
+          String author = book.getAuthor();
+          String publisher = book.getPublisher();
+          int publish_in = book.getPublish_in();
+          int volume = book.getVolume();
+          float cover_price_RMB = book.getCover_price_RMB();
+          int cover_price_NT = book.getCover_price_NT();
+          int stock_price_NT = book.getStock_price_NT();
+          int sold = book.getSold();
+          String note = book.getNote(); %>
+      booksBuffer
+                  .id<%= bookId %> = { id: <%= bookId %>,
+                                        name: '<%= name %>',
+                                        author: '<%= author%>',
+                                        publisher: '<%= publisher%>',
+                                        publish_in: <%= publish_in %>,
+                                        volume: <%= volume %>,
+                                        cover_price_RMB: <%= cover_price_RMB %>,
+                                        cover_price_NT: <%= cover_price_NT%>,
+                                        stock_price_NT: <%= stock_price_NT%>,
+                                        sold: <%= sold%>,
+                                        note: '<%= note%>' }
+      <% } %>
     </script>
   </head>
 
@@ -43,6 +71,7 @@
                 Order order = list.get(j);
                 int id = order.getId();
                 String client = order.getClient();
+                String shipping  = order.getShipping();
                 List books = order.getBooks();
                 List books_qt = order.getBooks_qt();
                 List status = order.getStatus();
@@ -56,6 +85,7 @@
             ordersBuffer
                     .id<%= id%> = {id: <%= id%>,
                       client: "<%= client%>",
+                      shipping: "<%= shipping%>",
                       books: [],
                       est_shipping: <%= est_shipping%>,
                       act_shipping: <%= act_shipping%>,
@@ -92,24 +122,25 @@
                 String author = book.getAuthor();
                 String publisher = book.getPublisher();
                 int publish_in = book.getPublish_in();
+                int volume = book.getVolume();
                 float cover_price_RMB = book.getCover_price_RMB();
                 int cover_price_NT = book.getCover_price_NT();
                 int stock_price_NT = book.getStock_price_NT();
                 int sold = book.getSold();
                 String note = book.getNote();
                 if (i == 0) {
-                  out.println("<td>" + name + "</td>");
+                  out.println("<td><a data-toggle=modal data-target=#detailBookModal data-bookId=" + bookId + ">" + name + "</a></td>");
                   out.println("<td>" + books_qt.get(i) + "</td>");
                   out.println("<td>" + status.get(i) + "</td>");
                 } else if (i % 2 == 0) {
                   out.println("<tr class=table-colored>");
-                  out.println("<td>" + name + "</td>");
+                  out.println("<td><a data-toggle=modal data-target=#detailBookModal data-bookId=" + bookId + ">" + name + "</a></td>");
                   out.println("<td>" + books_qt.get(i) + "</td>");
                   out.println("<td>" + status.get(i) + "</td>");
                   out.println("</tr>");
                 } else {
                   out.println("<tr >");
-                  out.println("<td>" + name + "</td>");
+                  out.println("<td><a data-toggle=modal data-target=#detailBookModal data-bookId=" + bookId + ">" + name + "</a></td>");
                   out.println("<td>" + books_qt.get(i) + "</td>");
                   out.println("<td>" + status.get(i) + "</td>");
                   out.println("</tr>");
@@ -120,6 +151,7 @@
                       name: '<%= name%>',
                       author: '<%= author%>',
                       publisher: '<%= publisher%>',
+                      volume: <%= volume %>,
                       publish_in: <%= publish_in%>,
                       cover_price_RMB: <%= cover_price_RMB%>,
                       cover_price_NT: <%= cover_price_NT%>,
@@ -138,10 +170,13 @@
     </div>
 
     <!-- Order Detail Modal with Edit Order Form -->
-    <%--@include file="auxil/detail_order_modal.jsp" --%>
+    <%@include file="auxil/detail_order_modal.jsp" %>
 
     <!-- Add Order Form -->
     <%@include file="auxil/add_order_form.jsp" %>
+    
+    <!-- Detail Book Modal -->
+    <%@include file="auxil/detail_book_modal.jsp" %>
 
     <script src="js/custom_order.js"></script>
     <script src="js/jquery.tablesort.min.js"></script>
