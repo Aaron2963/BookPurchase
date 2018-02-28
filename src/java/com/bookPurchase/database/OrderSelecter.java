@@ -46,6 +46,7 @@ public class OrderSelecter extends HttpServlet {
               Order order = new Order();
               order.setId(resultSet.getInt("id"));
               order.setClient(resultSet.getString("client"));
+              order.setShipping(resultSet.getString("shipping"));
               order.setBooks(order.splitToList(resultSet.getString("books")));
               order.setBooks_qt(order.splitToList(resultSet.getString("books_qt")));
               order.setStatus(order.splitToList(resultSet.getString("status")));

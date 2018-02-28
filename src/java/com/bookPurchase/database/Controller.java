@@ -30,9 +30,14 @@ public class Controller extends HttpServlet {
                             .forward(request, response);
                 break;
             case 3:
-                request.getRequestDispatcher("Setting")
+                request.getRequestDispatcher("setting.option")
                             .forward(request, response);
                 break;
         }
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         doGet(request, response);
     }
 }

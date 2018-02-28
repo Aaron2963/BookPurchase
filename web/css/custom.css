@@ -38,3 +38,6 @@ form textarea {
 .table-colored {
   background-color: #f3f3f3;
 }
+a[data-target="#detailBookModal"] {
+  border-bottom: 1px dotted #000;
+}

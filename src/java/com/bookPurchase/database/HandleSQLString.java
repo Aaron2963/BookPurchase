@@ -1,9 +1,7 @@
 package com.bookPurchase.database;
 
 import static com.bookPurchase.database.Order.joinToString;
-import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
