@@ -1,35 +1,5 @@
 <%@page import="com.bookPurchase.database.Book"%>
 <%@page import="java.util.List"%>
-<script>
-  var booksBuffer = {};
-  <% 
-    List<Book> bookList = (List) request.getAttribute("bookList");
-    for (Book book : bookList) { 
-      int bookId = book.getId();
-      String name = book.getName();
-      String author = book.getAuthor();
-      String publisher = book.getPublisher();
-      int publish_in = book.getPublish_in();
-      int volume = book.getVolume();
-      float cover_price_RMB = book.getCover_price_RMB();
-      int cover_price_NT = book.getCover_price_NT();
-      int stock_price_NT = book.getStock_price_NT();
-      int sold = book.getSold();
-      String note = book.getNote(); %>
-  booksBuffer
-              .id<%= bookId %> = { id: <%= bookId %>,
-                                    name: '<%= name %>',
-                                    author: '<%= author%>',
-                                    publisher: '<%= publisher%>',
-                                    publish_in: <%= publish_in %>,
-                                    volume: <%= volume %>,
-                                    cover_price_RMB: <%= cover_price_RMB %>,
-                                    cover_price_NT: <%= cover_price_NT%>,
-                                    stock_price_NT: <%= stock_price_NT%>,
-                                    sold: <%= sold%>,
-                                    note: '<%= note%>' }
-  <% } %>
-</script>
 <div class="modal" tabindex="-1" id="addOrderModal" data-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -92,7 +62,7 @@
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-dropdown="bookList">
                       <i class="fas fa-list-ul"></i> 新增書單
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu" id="allBookListDropdown">
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
@@ -135,6 +105,7 @@
                     <th class="sorter">單價￥</th>
                     <th class="sorter">數量</th>
                     <th class="sorter">金額￥</th>
+                    <th class="sorter d-none inEdit">狀態</th>
                   </tr>
                 </thead>
                 <tbody id="addBookList_tbody_amount"></tbody>
@@ -151,9 +122,13 @@
               </table>
             </div>
             <div class="form-row col-6 ml-auto">
+              <div class="form-group col d-none">
+                <label>實際運費</label>
+                <input class="form-control" id="actShippingCost" type="number" value="0" placeholder="0">
+              </div>
               <div class="form-group col">
-                <label>運費</label>
-                <input class="form-control" id="shippingCost" type="number" value="0" placeholder="0">
+                <label>預估運費</label>
+                <input class="form-control" id="estShippingCost" type="number" value="0" placeholder="0">
               </div>
               <div class="form-group col">
                 <label>折扣</label>
@@ -171,7 +146,7 @@
                 <tbody>
                   <tr>
                     <th>客戶名稱</th>
-                    <td><input class="form-control" name="client" type="text" value="自干五" disabled></td>
+                    <td><input class="form-control" name="client" type="text" value="WHO" disabled></td>
                   </tr>
                 </tbody>
               </table>
@@ -262,4 +237,3 @@
 </style>
 
 <%@include file="add_book_form.jsp" %>
-<script src="../js/custom_book.js"></script>
