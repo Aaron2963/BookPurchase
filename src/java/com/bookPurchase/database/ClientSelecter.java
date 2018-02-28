@@ -1,0 +1,65 @@
+package com.bookPurchase.database;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.*;
+import java.util.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ClientSelecter extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      handleRequest(request, response);
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      handleRequest(request, response);
+    }
+    
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+      response.setContentType("text/html;charset=UTF-8");
+        String table = "clients";
+        String username = "salvezzas";
+        String password = "pwsalvezzas";
+        
+        try {
+            // 加載數據庫驅動，註冊到驅動管理器
+            Class.forName("com.mysql.jdbc.Driver");
+            // 數據庫連接字符串
+            String url = getServletContext().getInitParameter("databaseUrl") + "?useUnicode=true&characterEncoding=utf-8";
+            // 創建Connection連接
+            Connection conn = DriverManager.getConnection(url, username, password);
+            // 添加客戶信息的SQL語句
+            String sql = "select * from " + table + " where hidden=0";
+            // 獲取Statement
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            List<Client> list = new ArrayList<Client>();
+            while (resultSet.next()) {
+                    Client client = new Client();
+                    client.setId(resultSet.getInt("id"));
+                    client.setName(resultSet.getString("name"));
+                    client.setRegion(resultSet.getString("region"));
+                    client.setRegion_num(resultSet.getInt("region_num"));
+                    list.add(client);
+            }
+            request.setAttribute("list", list);
+            resultSet.close();
+            statement.close();
+            conn.close();
+
+        } catch (Exception e) {
+                e.printStackTrace();
+        }
+
+        request.getRequestDispatcher("client_manage.jsp")
+                    .forward(request, response);
+    }
+}

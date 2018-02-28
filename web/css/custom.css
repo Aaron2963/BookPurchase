@@ -1,0 +1,40 @@
+th.sorter.ascending:after {
+  content: '▼';
+  color: #fff;
+}
+th.sorter.descending:after {
+  content: '▲';
+  color: #fff;
+}
+a.to-edit > i.fas:hover {
+  color: cornflowerblue;
+}
+div.embed-responsive {
+  background-image: url('../img/main.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+form textarea {
+  resize: none;
+}
+#editBookForm table {
+  margin: 0 auto;
+  width: 85%;
+}
+#editBookForm table td {
+  padding: 0.3rem;
+}
+#editBookForm table td:first-child {
+  background-color: #EEE;
+  text-align: center;
+  width: 6rem;
+  font-weight: 700;
+}
+#editBookForm table tr {
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  height: 2.5rem;
+}
+.table-colored {
+  background-color: #f3f3f3;
+}

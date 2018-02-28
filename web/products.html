@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!--<title>書籍代購-產品管理</title>-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>產品管理</h2>
+    <p class="toolbar">
+      <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">新增產品</button>
+    </p>
+
+    <div>
+      <table class="table text-center tablesorter">
+        <thead class="thead-dark">
+          <tr>
+            <th style="width:1rem"></th>
+            <th>書名</th>
+            <th>作者</th>
+            <th>出版社</th>
+            <th>出版年</th>
+            <th>定價
+              <br>RMB</th>
+            <th>備註</th>
+          </tr>
+        </thead>
+        <tbody id="productData">
+          <tr>
+            <td>
+              <input type="checkbox" name="toDel" value="1">
+            </td>
+            <td><a data-toggle="modal" data-target="#productDetailModal">李商隱詩歌</a></td>
+            <td>歐麗娟</td>
+            <td>五南</td>
+            <td>2003</td>
+            <td>89</td>
+            <td>已絕版</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div class="modal" tabindex="-1" id="productDetailModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="productDetailForm">
+          <div class="modal-header mx-auto">
+            <h5>產品詳細資訊</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-auto">
+            <div class="">
+              <span>書名：</span>
+              <span>李商隱詩歌</span>
+            </div>
+            <div class="">
+              <span>作者：</span>
+              <span>歐麗娟</span>
+            </div>
+            <div class="">
+              <span>出版社：</span>
+              <span>五南</span>
+            </div>
+            <div class="">
+              <span>出版年：</span>
+              <span>2003</span>
+            </div>
+            <div class="">
+              <span>定價：RMB</span>
+              <span>89</span>
+            </div>
+            <div class="">
+              <span>定價：NT</span>
+              <span>400</span>
+            </div>
+            <div class="">
+              <span>進價：NT</span>
+              <span>250</span>
+            </div>
+            <div class="">
+              <span>備註：</span>
+              <span>已絕版</span>
+            </div>
+          </div>
+          <div class="modal-footer mx-auto">
+            <button class="btn btn-primary" type="submit" onclick="confirmation('確定修改', 'product_update.php', '#productDetailForm')">修改</button>
+            <button class="btn" data-dismiss="modal">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Product Modal -->
+  <div class="modal" tabindex="-1" id="addProductModal" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>新增產品</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addProductForm">
+            <div class="form-group addProduct">
+              <label for="addProduct_name">書名</label>
+              <input type="text" name="addProduct_name" id="addProduct_name" class="form-control">
+            </div>
+            <div class="form-group addProduct">
+              <label>作者</label>
+              <input type="text" name="addProduct_author" id="addProduct_author" class="form-control">
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group addProduct">
+                  <label>出版社</label>
+                  <input type="text" name="addProduct_publisher" id="addProduct_publisher" class="form-control">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group addProduct">
+                  <label>出版年</label>
+                  <input type="number" name="addProduct_publishIn" id="addProduct_publishIn" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group addProduct">
+                  <label>定價RMB</label>
+                  <input type="number" name="addProduct_coverPriceRMB" id="addProduct_coverPriceRMB" class="form-control">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group addProduct">
+                  <label>定價NT</label>
+                  <input type="number" name="addProduct_coverPriceNT" id="addProduct_coverPriceNT" class="form-control">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group addProduct">
+                  <label>進價NT</label>
+                  <input type="number" name="addProduct_stockPriceNT" id="addProduct_stockPriceNT" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="form-group addProduct">
+              <label>備註</label>
+              <input type="text" name="addProduct_note" id="addProduct_note" class="form-control">
+            </div>
+            <div class="form-row">
+              <button type="submit" form="addProductForm" class="btn btn-success ml-auto">新增</button>
+              <button type="reset" form="addProductForm" class="btn ml-1">重設</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div class="modal" tabindex="-1" id="productDetailModal" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>產品詳細資訊</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="updateProductForm">
+            <div class="form-group updateProduct">
+              <label for="updateProduct_name">書名</label>
+              <input type="text" name="updateProduct_name" id="updateProduct_name" class="form-control">
+            </div>
+            <div class="form-group updateProduct">
+              <label>作者</label>
+              <input type="text" name="updateProduct_author" id="updateProduct_author" class="form-control">
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group updateProduct">
+                  <label>出版社</label>
+                  <input type="text" name="updateProduct_publisher" id="updateProduct_publisher" class="form-control">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group updateProduct">
+                  <label>出版年</label>
+                  <input type="number" name="updateProduct_publishIn" id="updateProduct_publishIn" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group updateProduct">
+                  <label>定價RMB</label>
+                  <input type="number" name="updateProduct_coverPriceRMB" id="updateProduct_coverPriceRMB" class="form-control">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group updateProduct">
+                  <label>定價NT</label>
+                  <input type="number" name="updateProduct_coverPriceNT" id="updateProduct_coverPriceNT" class="form-control">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group updateProduct">
+                  <label>進價NT</label>
+                  <input type="number" name="updateProduct_stockPriceNT" id="updateProduct_stockPriceNT" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="form-group updateProduct">
+              <label>備註</label>
+              <input type="text" name="updateProduct_note" id="updateProduct_note" class="form-control">
+            </div>
+            <div class="form-row">
+              <button type="submit" form="updateProductForm" class="btn btn-success ml-auto">新增</button>
+              <button type="reset" form="updateProductForm" class="btn ml-1">重設</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="js/custom.js"></script>
+  <script type="text/javascript" src="js/jquery.tablesort.min.js"></script>
+  <script type="text/javascript">
+    //window.onload = $('#loginModal').modal('show');
+    //window.onload = loadClients;
+    //$('table').tablesorter();
+    $('form').submit(function() {
+      return false;
+    })
+  </script>
+
+</body>
+
+</html>
