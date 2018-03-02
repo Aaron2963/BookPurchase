@@ -19,7 +19,9 @@ public class Book implements Serializable {
   private int stock_price_NT;
   private int sold;
   private String note;
-  
+  private String status;
+  private int qt;
+ 
   // 建構子：
   public Book() {}
   // 建構子：從請求中建構物件
@@ -169,5 +171,19 @@ public class Book implements Serializable {
   }
   public void setNote(String note) {
     this.note = note;
+  }
+  
+  public String getStatus() {
+    return status;
+  }
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public int getQt() {
+    return qt;
+  }
+  public void setQt(int qt) {
+    this.qt = qt;
   }
 }

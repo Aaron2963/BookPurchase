@@ -39,25 +39,12 @@ public class BooksOfOrderSelecter extends HttpServlet {
           List list =  (List) request.getAttribute("orderList");
           // 遞迴取得請求中Order物件的books數組，並據此從數據庫取得各書籍的更多資料
           for ( int i=0; i < list.size(); i++ ) {
-            String books;
-            Order o = (Order) list.get(i);
-            List b = o.getBooks();
-            StringBuilder s = new StringBuilder();
-            for ( int j=0; j < b.size(); j++ ) {
-              s.append(" id=").append(b.get(j));
-              if ( j != b.size()-1 ) {
-                s.append(" OR");
-              } 
-            }
-            books = s.insert(0, "(").append(" )").toString();
-            // 添加客戶信息的SQL語句
-            String sql = "select * from " + table + " WHERE "+ books +";";
-            // 獲取Statement
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
-            // 將數據庫取回之資料遞迴存為數組，並取代原來的books數組
-            List<Book> bookList = new ArrayList<>();
-            while (resultSet.next()) {
+            Order order = (Order) list.get(i);
+            List books = order.getBooks();
+            for ( int j=0; j < books.size(); j++) {
+              String sql =  "select * from " + table + " WHERE id=" + books.get(j) + ";";
+              Statement statement = conn.createStatement();
+              ResultSet resultSet = statement.executeQuery(sql);
               Book book = new Book();
               book.setId(resultSet.getInt("id"));
               book.setName(resultSet.getString("name"));
@@ -69,12 +56,13 @@ public class BooksOfOrderSelecter extends HttpServlet {
               book.setStock_price_NT(resultSet.getInt("stock_price_NT"));
               book.setSold(resultSet.getInt("sold"));
               book.setNote(resultSet.getString("note"));
-              bookList.add(book);
+              book.setStatus((String) order.getStatus().get(j));
+              book.setQt((int) Integer.valueOf((String) order.getBooks_qt().get(j)));
+              books.set(j, book);
+              resultSet.close();
+              statement.close(); 
             }
-            o.setBooks(bookList);
-            list.set(i, o);
-            resultSet.close();
-            statement.close();
+            order.setBooks(books);
           }
           // 從數據庫取得全部的書籍資料
           String sql2 = "select * from " + table + " WHERE hidden=0;";

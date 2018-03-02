@@ -50,12 +50,12 @@
         <servlet-class>com.bookPurchase.database.OrderSelecter</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>BooksOfOrderSelecter</servlet-name>
-        <servlet-class>com.bookPurchase.database.BooksOfOrderSelecter</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>OrderInserter</servlet-name>
         <servlet-class>com.bookPurchase.database.OrderInserter</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BooksOfOrderSelecter</servlet-name>
+        <servlet-class>com.bookPurchase.database.BooksOfOrderSelecter</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ResultSetToJson</servlet-name>
@@ -102,12 +102,12 @@
         <url-pattern>/order.list</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>BooksOfOrderSelecter</servlet-name>
-        <url-pattern>/BooksOfOrderSelecter</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>OrderInserter</servlet-name>
         <url-pattern>/OrderInserter</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BooksOfOrderSelecter</servlet-name>
+        <url-pattern>/BooksOfOrderSelecter</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
