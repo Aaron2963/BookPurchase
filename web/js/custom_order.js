@@ -1,12 +1,58 @@
 var bookCol = ['name', 'author', 'publisher', 'note', 'id', 'publish_in', 'volume',
-  'cover_price_RMB', 'cover_price_NT', 'stock_price_NT', 'sold']
+  'cover_price_RMB', 'cover_price_NT', 'stock_price_NT', 'sold'];
+var orderCol = ['client', 'shipping', 'est_shipping', 'act_shipping', 'discount', 
+  'amount', 'date', 'books'];
 
 // Listener & Submit
-$('#estShippingCost').keyup(amountRefresh);
+window.onload = function() 
+{$('#estShippingCost').keyup(amountRefresh);
 $('#discount').keyup(amountRefresh);
 $('#addOrderModal').on('show.bs.modal', showInputTab);
 $('#amount-tab').on('show.bs.tab', checkInputTab);
 $('#confirm-tab').on('show.bs.tab', checkInputTab);
+// onShow: detailBookModal: 書籍細目模態視圖
+$('a[data-bookId]').click( function(event) {
+  $('#detailBookModal').modal('show');
+  var td = '#book-detail-table td.book-'; 
+  var id = $(event.target).closest('[data-bookId]').attr('data-bookId');
+  for ( i = 0; i < bookCol.length; i++ ) {
+    $(td + bookCol[i]).text(booksBuffer[id][bookCol[i]]);
+  }  
+  $('button.to-edit').show();
+  $('#editBookForm_save').hide();
+});
+// onShow: detailOrderModal: 訂單細目模態視圖
+$('.toolkit .to-detail').click( function(event) {
+  $('#detailOrderModal').modal('show');
+  // 填入訂單基本資訊
+  var td = '#detailOrderModal td.order-'; 
+  var id = $(event.target).closest('[data-id]').attr('data-id');
+  for ( i = 0; i < orderCol.length; i++ ) {
+    if ( !Array.isArray(ordersBuffer[id][orderCol[i]]) ) {
+      $(td + orderCol[i]).text(ordersBuffer[id][orderCol[i]]);
+    } 
+  }
+  // 遞歸生成訂單的書單
+  $('#bookListInOrderDetail').html('');
+  for ( i = 0; i < ordersBuffer[id].books.length; i++ ) {
+    var book = ordersBuffer[id].books[i];
+    var tr = $('<tr></tr>');
+    var tds = [];
+    tds.push($('<td>' + book.name + '</td>'));
+    tds.push($('<td>' + book.publisher + '</td>'));
+    tds.push($('<td>' + book.cover_price_RMB + '</td>'));
+    tds.push($('<td>' + book.qt + '</td>'));
+    for ( j = 0; j < tds.length; j++  ) {
+      $(tr).append(tds[j]);
+    }
+    $('#bookListInOrderDetail').append(tr);
+  }
+  //  附加訂單ID於[修改]按鈕
+    $('#toEditBtn').click(function(){
+      $('#detailOrderModal').modal('hide');
+      initEditOrderForm(id);
+    });
+});
 $('#addOrderForm button[type="submit"]').on('click', function () {
   var disabled = $('#addOrderForm input[disabled]');
   $(disabled).prop('disabled', false);
@@ -25,8 +71,65 @@ $('#addOrderForm button[type="submit"]').on('click', function () {
 $("#addOrderForm").submit(function () {
   return false;
 });
+};
 
-/* ---- add_book_form ---- */
+/* ----------------------------------------------------*\
+ *             Order List  瀏覽訂單清單
+ \* -------------------------------------------------- */
+/* ---- Reduced Order  List 訂單簡表 ----*/
+function showOrderList() {
+  var orders = [];
+//  var col = [ 'date', 'client',  'amount', 'books'];
+//  var book = ['name', 'qt', 'status'];
+  for ( var order in ordersBuffer ) {
+    orders.push(order);
+  }
+  for ( i = 0; i < orders.length; i++ ) {
+    var order = ordersBuffer[orders[i]];
+    var row = $('<tr data-id="id'+ order.id +'"  data-name="'+ order.client +'"></tr>');
+    var tool = $('<td rowspan="'+ order.books.length +'">\
+                            <div class="toolkit">\
+                            <button class="btn btn-secondary to-detail m-1">\
+                            <i class="fas fas fa-info-circle"></i>\
+                          </button>\
+                          <button class="btn btn-secondary to-delete m-1">\
+                            <i class="far fa-trash-alt"></i>\
+                          </button>\
+                          </div>\
+                        </td>');
+    var td1 = $('<td rowspan="'+ order.books.length +'">' + order.date + '</td>');
+    var td2 = $('<td rowspan="'+ order.books.length +'">' + order.client + '</td>');
+    var td3 = $('<td rowspan="'+ order.books.length +'">' + order.amount + '</td>');
+    (i % 2 == 0) && $(row).addClass('table-colored');
+    $(row).append(tool);
+    $(row).append(td1);
+    $(row).append(td2);
+    $(row).append(td3);
+    for ( j = 0; j < order.books.length; j++ ) {
+      var tr = $('<tr></tr>');
+      var td4 = $('<td><a data-bookId="id'+ order.books[j].id +'">' + order.books[j].name + '</a></td>');
+      var td5 = $('<td>' + order.books[j].qt + '</td>');
+      var td6 = $('<td>' + order.books[j].status + '</td>');
+      if ( j == 0) {
+        $(row).append(td4);
+        $(row).append(td5);
+        $(row).append(td6);
+        $('#orderData').append(row);
+      } else {
+        (i % 2 == 0 && j % 2 == 0) && $(tr).addClass('table-colored');
+        (i % 2 == 1 && j % 2 == 1) && $(tr).addClass('table-colored');
+        $(tr).append(td4);
+        $(tr).append(td5);
+        $(tr).append(td6);
+        $('#orderData').append(tr);
+      }
+    }
+  }
+}
+
+/* ----------------------------------------------------*\
+ *         add_book_form  新增書籍
+ \* -------------------------------------------------- */
 // onSubmit
 $('#addBookForm_save').on('click', function () {
   var disabled = $('#addBookForm input[disabled]');
@@ -44,6 +147,9 @@ $('#addBookForm_save').on('click', function () {
   });
 });
 
+/* ----------------------------------------------------*\
+ *         add_order_form  新增訂單
+ \* -------------------------------------------------- */
 // 建立訂單分頁
 var hasChosen = [false, false];
 var bookArrayList = [];
@@ -220,16 +326,7 @@ function showConfirmTab() {
   $('#addOrderForm input[name="amount"]').val($('#amount').val());
 }
 
-/* ---- detail_book_modal ---- */
-// onShow
-$('a[data-target="#detailBookModal"]').on('click', function () {
-  var t = '#book-detail-table td.book-', d = 'id' +  $(this).attr('data-bookId');
-  for (i = 0; i < bookCol.length; i++) {
-    $(t + bookCol[i]).text(booksBuffer[d][bookCol[i]]);
-  }
-  $('button.to-edit').show();
-  $('#editBookForm_save').hide();
-});
+
 
 /* ---- edit_book_form ----*/
 // onShow
@@ -273,32 +370,96 @@ $('#editBookForm_save').on('click', function () {
 
 /*---- Edit Order Form ----*/
 function initEditOrderForm( orderId ) {
-  var order = ordersBuffer['id' + orderId];
-  hasChosen = [true, true];
-  $('button[data-dropdown="clientsList"]').text(order.client);
-  $('button[data-dropdown="shippingList"]').text(order.shipping);
-  $('#addOrderAmount #discount').val(order.discount);
-  $('#estShippingCost').val(order.est_shipping);
-  $('#actShippingCost').val(Number(order.act_shipping)).closest('div.col').removeClass('d-none');
-  $('#addOrderForm input[name="id"]').val(order.id);
-  bookArrayList = [];
+  var order = ordersBuffer[orderId];
+  $('#editOrderModal').modal('show');
+  hasChosenInEdit = [true, true];
+  $('#editOrderModal button[data-dropdown="clientsList"]').text(order.client);
+  $('#editOrderModal button[data-dropdown="shippingList"]').text(order.shipping);
+  $('#editOrderModal #editOrderAmount #discountInEdit').val(order.discount);
+  $('#editOrderModal #estShippingCostInEdit').val(order.est_shipping);
+  $('#editOrderModal #actShippingCostInEdit').val(Number(order.act_shipping));
+  $('#editOrderModal #editOrderForm input[name="id"]').val(order.id);
+  bookArrayListInEdit = [];
   addToBookListFromOrder(order);
 }
 function addToBookListFromOrder(order) {
   var delBtn = '<button type="button" class="close" onclick="delFromBooklist(this)">'
           + '<span aria-hidden="true">&times;</span>'
           + '</button>';
-  var qtInput = '<input class="books_qt form-control" type="number" value="1">';
+  var qtInput = '<input class="books_qtInEdit form-control" type="number" value="1">';
+  $('#editBookList_tbody').html('');
   for (j = 0; j < order.books.length; j++ ) {
     var book = order.books[j];
     var col = [delBtn, book.name, book.publisher, book.volume, book.note, qtInput];
     var row = "";
-    bookArrayList.push(book);
+    bookArrayListInEdit.push(book);
     row += '<tr data-bookId="' + book.id + '">';
     for (i = 0; i < col.length; i++) {
       row += '<td>' + col[i] + '</td>';
     }
     row += '</tr>';
-    $('#addBookList_tbody').append(row);
+    $('#editBookList_tbody').append(row);
   } 
+}
+
+// 金額試算分頁(修改訂單)
+function showAmountTabInEdit() {
+  var total = 0;
+  setBooks_qtInEdit();
+  $('#editookList_tbody_amount').html('');
+  for (i = 0; i < bookArrayListInEdit.length; i++) {
+    var book = bookArrayListInEdit[i];
+    var col = [book.name, book.publisher, book.volume, book.cover_price_RMB, 
+                    book.qt, (book.cover_price_RMB * book.qt), book.status];
+    var row = "<tr>";
+    for (j = 0; j < col.length - 1; j++) {
+      row += '<td>' + col[j] + '</td>';
+    }
+    row += '<td>' + book.status + '</td>';
+    row += ('<tr>');
+    $('#editBookList_tbody_amount').append(row);
+    total += col[5];
+  }
+  $('#subtotalInEdit').text(total);
+  setShippingTotalInEdit();
+  amountRefreshInEdit();
+}
+function amountRefreshInEdit() {
+  var subtotal = parseInt($('#subtotalInEdit').text());
+  var estShippingCost = parseInt($('#estShippingCostInEdit').val());
+  var discount = parseInt($('#discountInEdit').val());
+  $('#amountInEdit').val(subtotal + estShippingCost - discount);
+}
+function setBooks_qtInEdit() {
+  var books_qt = $('input.books_qtInEdit');
+  for (i = 0; i < books_qt.length; i++) {
+    var index = bookArrayList
+            .findIndex(function (book) {
+              return book.id == $(books_qt[i]).closest('tr').attr('data-bookId');
+            });
+    bookArrayList[index].qt = $(books_qt[i]).val();
+  }
+}
+function setShippingTotalInEdit() {
+  var shippingWay = ['合運分寄', '郵政小包', '貨運寄送', '其他方式'];
+  var r = shippingWay.indexOf($('#editOrderModal button[data-dropdown="shippingList"]').text());
+  var count = 0;
+  for (i = 0; i < bookArrayList.length; i++) {
+    count += (bookArrayList[i].qt * bookArrayList[i].volume);
+  }
+  switch (r) {
+    case 0:
+      count = (count * 15) + 12;
+      break;
+    case 1:
+      count = (count * 45);
+      break;
+    case 2:
+      count = (count * 55);
+      break;
+    case 3:
+      count = 0;
+      break;
+  }
+  $('#estShippingCostInEdit').val(count).attr('placeholder', count);
 }

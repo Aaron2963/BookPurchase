@@ -28,6 +28,7 @@
           <thead class="thead-dark">
             <tr>
               <th class="sorter">訂單操作</th>
+              <th class="sorter">日期</th>
               <th class="sorter">客戶名稱</th>
               <th class="sorter">金額￥</th>
               <th class="sorter">商品名稱</th>
@@ -36,29 +37,6 @@
             </tr>
           </thead>
           <tbody id="orderData">
-          <tr>
-            <td rowspan=">
-                <div class="toolkit">
-                <button class="btn btn-secondary to-detail"
-                    data-id="id>"
-                    data-toggle="modal"
-                    data-target="#detailOrderModal">
-                <i class="fas fas fa-info-circle"></i>
-              </button>
-              <button class="btn btn-secondary to-delete" 
-                      value=">"
-                      data-name="">
-                <i class="far fa-trash-alt"></i>
-              </button>
-              </div>
-            </td>
-            <td rowspan=""></td>
-            <td rowspan=""></td>
-            
-          <script>
-            
-          </script>
-          </tr>
           </tbody>
         </table>
       </div>
@@ -72,11 +50,15 @@
     
     <!-- Detail Book Modal -->
     <%@include file="auxil/detail_book_modal.jsp" %>
+    
+    <!-- Edit Order Form -->
+    <%@include file="auxil/edit_order_form.jsp" %>
 
     <script src="js/custom_order.js"></script>
     <script src="js/jquery.tablesort.min.js"></script>
     <script>
-            $('table').tablesort();
+      showOrderList()
+      $('table').tablesort();
     </script>
 
   </body>

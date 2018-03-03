@@ -44,8 +44,6 @@
         String client = order.getClient();
         String shipping  = order.getShipping();
         List books = order.getBooks();
-        List books_qt = order.getBooks_qt();
-        List status = order.getStatus();
         int est_shipping = order.getEst_shipping();
         int act_shipping = order.getAct_shipping();
         int discount = order.getDiscount();
@@ -75,7 +73,9 @@
       int cover_price_NT = book.getCover_price_NT();
       int stock_price_NT = book.getStock_price_NT();
       int sold = book.getSold();
-      String note = book.getNote(); %>
+      String note = book.getNote();
+      int qt = book.getQt();
+      String status = book.getStatus(); %>
   ordersBuffer.id<%= id%>.books.push(
                     {id: <%= bookId%>,
                       name: '<%= name%>',
@@ -88,7 +88,7 @@
                       stock_price_NT: <%= stock_price_NT%>,
                       sold: <%= sold%>,
                       note: '<%= note%>',
-                      qt: <%= books_qt.get(i)%>,
-                      status: '<%= status.get(i)%>'});
+                      qt: <%= qt%>,
+                      status: '<%= status%>'});
   <%}}%>
 </script>

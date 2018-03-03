@@ -122,10 +122,6 @@
               </table>
             </div>
             <div class="form-row col-6 ml-auto">
-              <div class="form-group col d-none">
-                <label>實際運費</label>
-                <input class="form-control" id="actShippingCost" type="number" value="0" placeholder="0">
-              </div>
               <div class="form-group col">
                 <label>預估運費</label>
                 <input class="form-control" id="estShippingCost" type="number" value="0" placeholder="0">

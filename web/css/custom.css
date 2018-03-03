@@ -41,3 +41,10 @@ form textarea {
 a[data-target="#detailBookModal"] {
   border-bottom: 1px dotted #000;
 }
+tr[data-id] {
+  margin: 0.5rem 0;
+  border-top: 2px solid #D8DBDE;
+}
+.table td, .table th {
+  vertical-align: middle;
+}

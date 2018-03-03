@@ -45,6 +45,7 @@ public class BooksOfOrderSelecter extends HttpServlet {
               String sql =  "select * from " + table + " WHERE id=" + books.get(j) + ";";
               Statement statement = conn.createStatement();
               ResultSet resultSet = statement.executeQuery(sql);
+              resultSet.first();
               Book book = new Book();
               book.setId(resultSet.getInt("id"));
               book.setName(resultSet.getString("name"));

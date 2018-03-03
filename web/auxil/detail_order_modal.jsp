@@ -13,25 +13,25 @@
           <tbody>
             <tr>
               <th>客戶</th>
-              <td class="order-client">自干五</td>
+              <td class="order-client"></td>
               <th>寄送方式</th>
-              <td class="order-shipping">合運分寄</td>
+              <td class="order-shipping"></td>
             </tr>
             <tr>
               <th>日期</th>
-              <td class="order-date">20180227</td>
+              <td class="order-date"></td>
               <th>預估運費</th>
-              <td class="order-est_shipping">90</td>
+              <td class="order-est_shipping"></td>
             </tr>
             <tr>
               <th>總金額</th>
-              <td class="order-amount">220</td>
+              <td class="order-amount"></td>
               <th>實際運費</th>
-              <td class="order-act_shipping">75</td>
+              <td class="order-act_shipping"></td>
             </tr>
             <tr>
               <th>折扣</th>
-              <td class="order-discount">30</td>
+              <td class="order-discount"></td>
             </tr>
           </tbody>
         </table>
@@ -45,19 +45,7 @@
               <th>數量</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>李商隱詩選</td>
-              <td>五南</td>
-              <td>65</td>
-              <td>2</td>
-            </tr>
-            <tr>
-              <td>誰在銀閃閃的地方，等你</td>
-              <td>印刻</td>
-              <td>95</td>
-              <td>1</td>
-            </tr>
+          <tbody id="bookListInOrderDetail">
           </tbody>
         </table>
       </div>
@@ -68,10 +56,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  $('#toEditBtn').click(function() {
-    $('#detailOrderModal').modal('hide');
-    $('#editOrderModal').modal('show');
-  });
-</script>

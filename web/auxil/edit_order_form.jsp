@@ -1,35 +1,5 @@
 <%@page import="com.bookPurchase.database.Book"%>
 <%@page import="java.util.List"%>
-<script>
-//  var booksBuffer = {};
-  <%-- 
-    List<Book> bookList = (List) request.getAttribute("bookList");
-    for (Book book : bookList) { 
-      int bookId = book.getId();
-      String name = book.getName();
-      String author = book.getAuthor();
-      String publisher = book.getPublisher();
-      int publish_in = book.getPublish_in();
-      int volume = book.getVolume();
-      float cover_price_RMB = book.getCover_price_RMB();
-      int cover_price_NT = book.getCover_price_NT();
-      int stock_price_NT = book.getStock_price_NT();
-      int sold = book.getSold();
-      String note = book.getNote(); %>
-  booksBuffer
-              .id<%= bookId %> = { id: <%= bookId %>,
-                                    name: '<%= name %>',
-                                    author: '<%= author%>',
-                                    publisher: '<%= publisher%>',
-                                    publish_in: <%= publish_in %>,
-                                    volume: <%= volume %>,
-                                    cover_price_RMB: <%= cover_price_RMB %>,
-                                    cover_price_NT: <%= cover_price_NT%>,
-                                    stock_price_NT: <%= stock_price_NT%>,
-                                    sold: <%= sold%>,
-                                    note: '<%= note%>' }
-  <% } --%>
-</script>
 <div class="modal" tabindex="-1" id="editOrderModal" data-backdrop="static">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -145,19 +115,23 @@
                     <td></td>
                     <td></td>
                     <th>小計</th>
-                    <td id="subtotal">0</td>
+                    <td id="subtotalInEdit">0</td>
                   </tr>
                 </tfoot>
               </table>
             </div>
             <div class="form-row col-6 ml-auto">
               <div class="form-group col">
-                <label>運費</label>
-                <input class="form-control" id="shippingCost" type="number" value="0" placeholder="0">
+                <label>實際運費</label>
+                <input class="form-control" id="actShippingCostInEdit" type="number" value="0" placeholder="0">
+              </div>
+              <div class="form-group col">
+                <label>預估運費</label>
+                <input class="form-control" id="estShippingCostInEdit" type="number" value="0" placeholder="0">
               </div>
               <div class="form-group col">
                 <label>折扣</label>
-                <input class="form-control" id="discount" type="number" value="0">
+                <input class="form-control" id="discountInEdit" type="number" value="0">
               </div>
               <div class="form-group col">
                 <label>總計</label>
@@ -260,5 +234,3 @@
     width: 8rem;
   }
 </style>
-
-<%@include file="add_book_form.jsp" %>
